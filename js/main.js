@@ -304,7 +304,8 @@ function formatCitation(entry) {
       v: { s: 'š', S: 'Š', c: 'č', C: 'Č', z: 'ž', Z: 'Ž' }
     };
     // handle accents like \'e or \'{e}
-    s = s.replace(/\\([`'\^\"~])\{?([A-Za-z])\}?/g, function(_, acc, ch) {
+  // accept optional backslash inside braces, e.g. {\'\i}
+  s = s.replace(/\\([`'\^\"~])\{?\\?([A-Za-z])\}?/g, function(_, acc, ch) {
       const table = accentMap[acc];
       if (table && table[ch]) return table[ch];
       // Try lowercase fallback
