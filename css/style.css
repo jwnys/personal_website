@@ -1,7 +1,7 @@
 /* Root variables for colours and typography */
 :root {
-    --primary-color: #0f1a2b;
-    --accent-color: #7f5af0;
+    --primary-color: #08263f; /* navy blue primary */
+    --accent-color: #1f6feb;  /* bright blue accent */
     --text-color: #333;
     --light-text: #f5f5f5;
     --link-color: #5555ff;
@@ -29,13 +29,15 @@ body {
    Remove the backdrop blur used in the dark version and instead apply a subtle
    drop shadow for separation from the hero section. */
 .navbar {
-    position: sticky;
+    position: fixed; /* keep the nav at the top of the viewport */
     top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     background-color: #ffffff;
     color: var(--primary-color);
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    z-index: 1100;
+    box-shadow: 0 4px 12px rgba(8, 38, 63, 0.06);
 }
 .nav-container {
     display: flex;
@@ -84,33 +86,53 @@ body {
     min-height: 400px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    /* Use the same background image but apply a light overlay via ::before */
+    justify-content: center; /* center the hero block horizontally on the page */
+    /* keep the hero white and simple (no generic image) */
     color: var(--primary-color);
-    background-image: url('../images/hero.png');
-    background-size: cover;
-    background-position: center;
+    background-color: #ffffff;
 }
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Lighten the hero image instead of darkening it */
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.8));
-    z-index: 0;
-}
+.hero-section::before { display: none; }
 .hero-content {
     position: relative;
     z-index: 1;
-    text-align: left;
+    text-align: left; /* keep text left-aligned inside the centered block */
+    max-width: 720px; /* fixed width for the hero block */
+    margin: 0 auto; /* center the block within the hero section */
+    padding: 0 2%;
 }
 .hero-content h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
     font-weight: 700;
+}
+.hero-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.profile-pic-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    flex: 0 0 72px;
+    box-shadow: 0 6px 18px rgba(8,38,63,0.08);
+    background: linear-gradient(135deg, rgba(31,111,235,0.06), rgba(8,38,63,0.03));
+    border: 2px solid rgba(31,111,235,0.12);
+    transform: translateZ(0);
+    animation: picIn 700ms ease both;
+}
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+@keyframes picIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 .hero-content h1 .highlight {
     color: var(--accent-color);
@@ -129,6 +151,16 @@ body {
     border-right: 2px solid var(--accent-color);
     padding-right: 2px;
     animation: blinkCursor 0.8s steps(1) infinite;
+}
+
+/* Reserve some horizontal space for the typed phrases so the surrounding
+   block doesn't shift while text is typed/erased. Adjust min-width if you
+   add longer phrases. */
+#typed-text {
+    display: inline-block;
+    /* reserve space for the longest phrase to avoid reflow; increased to
+       approximate the longest phrase length used in the scripts */
+    min-width: 320px;
 }
 
 @keyframes blinkCursor {
@@ -151,6 +183,14 @@ body {
     opacity: 1;
 }
 
+/* Ensure body content is not hidden under the fixed navbar */
+body {
+    margin: 0;
+    color: var(--text-color);
+    background-color: #ffffff;
+    padding-top: 64px; /* height of navbar to offset fixed position */
+}
+
 /* Section headings */
 section h2 {
     font-size: 2rem;
@@ -166,6 +206,27 @@ section h2 {
 .about-section p {
     max-width: 800px;
     font-size: 1.1rem;
+}
+
+.education-section {
+    padding: var(--section-padding) 0;
+    background-color: #ffffff;
+}
+.education-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.education-item {
+    background: #fff;
+    border-left: 4px solid var(--accent-color);
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+}
+.education-item .meta {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
 }
 
 /* Projects section */
@@ -284,4 +345,7 @@ footer {
     .project {
         padding: 0.8rem 1rem;
     }
+.nav-links { display: none; }
+.nav-toggle { display: inline-block; }
+.nav-links.open { display: flex; flex-direction: column; gap: 0.5rem; background: #fff; padding: 10px; position: absolute; right: 10px; top: 64px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 6px; }
 }

@@ -16,18 +16,24 @@
         <nav class="navbar">
             <div class="container nav-container">
                 <div class="logo">Jannes Nys</div>
-                <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
-                <ul class="nav-links">
+                <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-controls="nav-links">☰</button>
+                <ul id="nav-links" class="nav-links">
                     <li><a href="#home">Home</a></li>
+                    <li><a href="#education">Education</a></li>
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#publications">Publications</a></li>
-                    <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+                    <li><a href="mailto:jannesnys@gmail.com" rel="noopener">Request CV</a></li>
                 </ul>
             </div>
         </nav>
         <div class="hero-content">
             <div class="container">
-                <h1>Hi, I'm <span class="highlight">Jannes Nys</span></h1>
+                <div class="hero-top">
+                    <div class="profile-pic-wrap" aria-hidden="true">
+                        <img src="profile_pic.jpg" alt="Jannes Nys" class="profile-pic" />
+                    </div>
+                    <h1>Hi, I'm <span class="highlight"><strong>Jannes Nys</strong></span></h1>
+                </div>
                 <!-- Tagline with dynamic typing effect.  The typed words will be injected via JS -->
                 <p class="tagline">Research scientist at the intersection of <span id="typed-text"></span></p>
                 <div class="social-icons">
@@ -37,7 +43,7 @@
                     <a href="https://orcid.org/0000-0001-7491-3660" target="_blank" rel="noopener" title="ORCID">
                         <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/orcid.svg" alt="ORCID" />
                     </a>
-                    <a href="https://scholar.google.com/citations?user=uVWYr08AAAAJ" target="_blank" rel="noopener" title="Google Scholar">
+                    <a href="https://scholar.google.com/citations?user=dFmD8MsAAAAJ" target="_blank" rel="noopener" title="Google Scholar">
                         <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/googlescholar.svg" alt="Google Scholar" />
                     </a>
                 </div>
@@ -50,9 +56,11 @@
         <section id="about" class="about-section">
             <div class="container">
                 <h2>About Me</h2>
-                <p>I'm a research scientist with more than nine years' experience working at the intersection of quantum many‑body physics, machine learning and high‑performance computing. I develop scalable algorithms — both classical and quantum — for simulating electronic matter and quantum dynamics and translate research into robust code. Recently, I have advanced neural‑quantum‑state methods and variational time‑evolution schemes at ETH Zürich and EPFL, with results published in <em>Nature Communications</em> and <em>Nature Physics</em>. My background spans leading cross‑disciplinary teams, industry collaborations and grant‑funded research programmes.</p>
+                <p>I'm a research scientist with more than nine years' experience working at the intersection of quantum many‑body physics, machine learning and high‑performance computing. I develop scalable algorithms — both classical and quantum — for simulating electronic matter and quantum dynamics and translate research into robust code. Recently, I have advanced neural‑quantum‑state methods and variational time‑evolution schemes at ETH Zürich and EPFL. My background spans leading cross‑disciplinary teams, industry collaborations and grant‑funded research programmes.</p>
             </div>
         </section>
+
+    <!-- Education Section (moved below Projects per request) -->
 
         <!-- Projects Section -->
         <section id="projects" class="projects-section">
@@ -77,9 +85,34 @@
                     </div>
                     <div class="project">
                         <h3>Scientific Advisor – BioClue (2019 – 2020)</h3>
-                        <p>Prototyped a novel DNA sequencing and search‑and‑retrieval model using HYFT patterns, contributing to €2&nbsp;M external investment and subsequent acquisition by IPA.</p>
+                        <p>Prototyped a DNA sequencing and search‑and‑retrieval model using HYFT patterns, contributing to external investment and subsequent acquisition by IPA.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="education-section">
+            <div class="container">
+                <h2>Education</h2>
+                <div class="education-list">
+                    <div class="education-item">
+                        <h3>Doctor in Science (PhD), Physics — Ghent University, Belgium</h3>
+                        <p class="meta">Oct 2014 – Sep 2018</p>
+                        <p>Thesis: <em>Analyticity constraints for hadron amplitudes</em>. Research focused on theoretical high‑energy physics and non‑perturbative QCD predictions; thesis received commendation from the examining jury.</p>
+                    </div>
+                    <div class="education-item">
+                        <h3>MSc in Artificial Intelligence — KU Leuven, Belgium</h3>
+                        <p class="meta">Oct 2015 – Sep 2020 (part‑time)</p>
+                        <p>Coursework in computer vision, kernel methods, deep learning and information retrieval. Thesis: <em>Quantum machine learning</em> (summa cum laude).</p>
+                    </div>
+                    <div class="education-item">
+                        <h3>MSc &amp; BSc in Physics and Astronomy — Ghent University, Belgium</h3>
+                        <p class="meta">Oct 2009 – Jul 2014</p>
+                        <p>Graduated summa cum laude; ranked first in class.</p>
+                    </div>
+                </div>
+                <p class="note">Full CV and supporting documents are available on request — please <a href="mailto:jannesnys@gmail.com">email me</a>.</p>
             </div>
         </section>
 
@@ -99,7 +132,44 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+        <!-- Inline BibTeX fallback: parsed when fetch is blocked (helps when opening file:// or when hosting blocks fetch) -->
+        <script id="inline-bib" type="application/x-bibtex">
+@inproceedings{vrancx2014complete,
+    title={Complete sets of observables in pseudoscalar-meson photo-production},
+    author={Vrancx, Tom and Ryckebusch, Jan and Nys, Jannes},
+    booktitle={EPJ Web of Conferences},
+    volume={73},
+    pages={04011},
+    year={2014},
+    organization={EDP Sciences}
+}
+
+@article{vrancx2014k+,
+    title={K+ $\\Lambda$ electroproduction above the resonance region},
+    author={Vrancx, Tom and Ryckebusch, Jan and Nys, Jannes},
+    journal={Physical Review C},
+    volume={89},
+    number={6},
+    pages={065202},
+    year={2014},
+    publisher={American Physical Society}
+}
+
+@article{nys2015amplitude,
+    title={Amplitude extraction in pseudoscalar-meson photoproduction: towards a situation of complete information},
+    author={Nys, Jannes and Vrancx, Tom and Ryckebusch, Jan},
+    journal={Journal of Physics G: Nuclear and Particle Physics},
+    volume={42},
+    number={3},
+    pages={034016},
+    year={2015},
+    publisher={IOP Publishing}
+}
+
+<!-- Note: truncated inline BibTeX to keep file size small; full `data/biblio.bib` remains the canonical source. -->
+        </script>
+
+        <!-- Scripts -->
     <script src="js/bibtexParse.js"></script>
     <script src="js/main.js"></script>
 </body>
