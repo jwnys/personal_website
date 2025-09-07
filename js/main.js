@@ -87,79 +87,51 @@ document.addEventListener('DOMContentLoaded', () => {
   const attemptDetails = [];
   // Ensure the bibtex parser is available. Returns a Promise that resolves when ready.
   function ensureBibtexParser() {
-    const getParser = () => {
-      if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
-        return bibtexParse;
-      }
-      if (typeof exports !== 'undefined' && exports && typeof exports.toJSON === 'function') {
-        if (typeof window !== 'undefined') {
-          window.bibtexParse = exports;
-        }
-        return exports;
-      }
-      return null;
-    };
-
     return new Promise((resolve, reject) => {
-      if (getParser()) return resolve();
+      // Fast path: already available
+      if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+        return resolve();
+      }
 
-      // If a script tag for bibtexParse.js exists, wait a short time for it to initialize
+      // If a script tag exists that points to bibtexParse.js, wait briefly for it to initialize
       const existing = Array.from(document.getElementsByTagName('script')).find(
         (s) => s.src && s.src.includes('bibtexParse.js')
       );
-      if (existing) {
-        const checkInterval = setInterval(() => {
-          if (getParser()) {
-            clearInterval(checkInterval);
-            resolve();
+      const waitForGlobal = (timeoutMs = 2000) => {
+        const start = Date.now();
+        const iv = setInterval(() => {
+          if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+            clearInterval(iv);
+            return resolve();
+          }
+          if (Date.now() - start > timeoutMs) {
+            clearInterval(iv);
+            return reject(new Error('bibtexParse did not initialize'));
           }
         }, 50);
-        // timeout after 2s
-        setTimeout(() => {
-          if (getParser()) return;
-          clearInterval(checkInterval);
-          reject(new Error('bibtexParse did not initialize'));
-        }, 2000);
+      };
+
+      if (existing) {
+        waitForGlobal(2000);
         return;
       }
 
-      // Otherwise dynamically insert the script
+      // Otherwise inject the parser script and wait for it to define window.bibtexParse
       const script = document.createElement('script');
       script.src = 'js/bibtexParse.js';
+      script.async = false; // execute in order
       script.onload = () => {
-        if (getParser()) {
-          resolve();
-        } else {
-          reject(new Error('bibtexParse loaded but did not initialize'));
-        }
-        if (i >= candidates.length) {
-          return reject(new Error('bibtexParse did not initialize'));
-        }
-        const url = candidates[i++];
-        // Append a cache-busting query param to force reload/execute
-        const sep = url.includes('?') ? '&' : '?';
-        const src = url + sep + 'ts=' + Date.now();
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => {
-          // Give the browser a tiny tick to run the script
-          setTimeout(() => {
-            if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
-              return resolve();
-            }
-            // otherwise try the next candidate
-            tryNextScript();
-          }, 30);
-        };
-        script.onerror = () => {
-          console.debug('Failed to load parser script from', src);
-          tryNextScript();
-        };
-        // Insert the script and let it execute
-        document.head.appendChild(script);
-      }
-
-      tryNextScript();
+        // give the script a tick to run
+        setTimeout(() => {
+          if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+            return resolve();
+          }
+          // wait a little longer for global to appear
+          waitForGlobal(1500);
+        }, 30);
+      };
+      script.onerror = (e) => reject(new Error('Failed to load js/bibtexParse.js'));
+      document.head.appendChild(script);
     });
   }
   function tryFetchCandidates(idx = 0) {
