@@ -356,19 +356,34 @@ function formatCitation(entry) {
     let s = sanitizeBibtex(name);
     // collapse whitespace
     s = s.replace(/\s+/g, ' ').trim();
-    // If 'Last, First' form, invert
+    // Helper: detect if token looks like an initial (single letter, with or without dot)
+    const isInitial = (tok) => /^[A-Za-z]$/.test(tok) || /^[A-Za-z]\.$/.test(tok);
+
+    // If 'Last, First' form, invert and normalize initials
     if (s.indexOf(',') >= 0) {
       const parts = s.split(',');
       const last = parts[0].trim();
-      const first = parts.slice(1).join(',').trim();
-      return (first + ' ' + last).trim();
+      const firstPart = parts.slice(1).join(',').trim();
+      const toks = firstPart.split(/\s+/).filter(Boolean).map(t => t.trim());
+      const firstNorm = toks.map(t => isInitial(t) ? (t.replace('.', '') + '.') : t).join(' ');
+      return (firstNorm + ' ' + last).trim();
     }
-    // Otherwise assume last token is last name
-    const tokens = s.split(' ');
+
+    // Otherwise assume 'First Middle Last' style. Handle particles (van, von, de, etc.)
+    const tokens = s.split(' ').filter(Boolean);
     if (tokens.length <= 1) return s;
-    const last = tokens[tokens.length - 1];
-    const first = tokens.slice(0, tokens.length - 1).join(' ');
-    return (first + ' ' + last).trim();
+    const lower = (t) => t.toLowerCase();
+    const particles = new Set(['van','von','de','del','den','der','di','la','le','du','mc','mac','al']);
+    // If the penultimate token is a particle, treat it as part of the last name
+    let lastName = tokens[tokens.length - 1];
+    let given = tokens.slice(0, tokens.length - 1);
+    if (tokens.length >= 2 && particles.has(lower(tokens[tokens.length - 2]))) {
+      lastName = tokens.slice(tokens.length - 2).join(' ');
+      given = tokens.slice(0, tokens.length - 2);
+    }
+    // Normalize initials in given names
+    const givenNorm = given.map(t => isInitial(t) ? (t.replace('.', '') + '.') : t).join(' ');
+    return (givenNorm + ' ' + lastName).trim();
   }
 
   function formatAuthors(raw) {
