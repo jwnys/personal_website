@@ -444,7 +444,9 @@ function formatCitation(entry) {
   const citation = mainPart + (link ? link : '');
   if (authors) {
     // show authors on their own line with a label
-    return citation + ' <p class="pub-authors">Authors: ' + authors + '.</p>';
+    // Bold the site owner's name when present
+    const authorsHtml = String(authors).replace(/\bJannes Nys\b/g, '<strong>Jannes Nys</strong>');
+    return citation + ' <p class="pub-authors">Authors: ' + authorsHtml + '.</p>';
   }
   return citation;
 }
