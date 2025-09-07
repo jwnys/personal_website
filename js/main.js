@@ -356,21 +356,22 @@ function formatCitation(entry) {
     let s = sanitizeBibtex(name);
     // collapse whitespace
     s = s.replace(/\s+/g, ' ').trim();
-    // Helper: detect if token looks like an initial (single letter, with or without dot)
-    const isInitial = (tok) => /^[A-Za-z]$/.test(tok) || /^[A-Za-z]\.$/.test(tok);
+  // Helper: detect if token looks like an initial (single letter, with or without dot)
+  const isInitial = (tok) => /^[A-Za-z]$/.test(tok) || /^[A-Za-z]\.$/.test(tok);
+  const cleanToken = (t) => t.replace(/^\.+|\.+$/g, '').replace(/^\(|\)$/g, '').trim();
 
     // If 'Last, First' form, invert and normalize initials
     if (s.indexOf(',') >= 0) {
       const parts = s.split(',');
-      const last = parts[0].trim();
+      const last = cleanToken(parts[0]);
       const firstPart = parts.slice(1).join(',').trim();
-      const toks = firstPart.split(/\s+/).filter(Boolean).map(t => t.trim());
+      const toks = firstPart.split(/\s+/).filter(Boolean).map(t => cleanToken(t));
       const firstNorm = toks.map(t => isInitial(t) ? (t.replace('.', '') + '.') : t).join(' ');
       return (firstNorm + ' ' + last).trim();
     }
 
     // Otherwise assume 'First Middle Last' style. Handle particles (van, von, de, etc.)
-    const tokens = s.split(' ').filter(Boolean);
+  const tokens = s.split(' ').filter(Boolean).map(t => cleanToken(t));
     if (tokens.length <= 1) return s;
     const lower = (t) => t.toLowerCase();
     const particles = new Set(['van','von','de','del','den','der','di','la','le','du','mc','mac','al']);
@@ -387,9 +388,11 @@ function formatCitation(entry) {
   }
 
   function formatAuthors(raw) {
-    if (!raw) return '';
-    // split on ' and ' (BibTeX separator)
-    const parts = raw.split(/\s+and\s+/i).map(p => p.trim()).filter(Boolean);
+  if (!raw) return '';
+  // normalize common 'and others' variants to 'et al.'
+  raw = raw.replace(/,?\s*(and\s+)?others\.?/i, ' et al.');
+  // split on ' and ' (BibTeX separator)
+  const parts = raw.split(/\s+and\s+/i).map(p => p.trim()).filter(Boolean);
     const names = parts.map(formatAuthorName).filter(Boolean);
     if (names.length === 0) return '';
     if (names.length === 1) return names[0];
