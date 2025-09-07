@@ -87,35 +87,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const attemptDetails = [];
   // Ensure the bibtex parser is available. Returns a Promise that resolves when ready.
   function ensureBibtexParser() {
-    return new Promise((resolve, reject) => {
-      try {
-        if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
-          return resolve();
+    const getParser = () => {
+      if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+        return bibtexParse;
+      }
+      if (typeof exports !== 'undefined' && exports && typeof exports.toJSON === 'function') {
+        if (typeof window !== 'undefined') {
+          window.bibtexParse = exports;
         }
-      } catch (e) {}
+        return exports;
+      }
+      return null;
+    };
+
+    return new Promise((resolve, reject) => {
+      if (getParser()) return resolve();
+
       // If a script tag for bibtexParse.js exists, wait a short time for it to initialize
-      const existing = Array.from(document.getElementsByTagName('script')).find(s => s.src && s.src.includes('bibtexParse.js'));
+      const existing = Array.from(document.getElementsByTagName('script')).find(
+        (s) => s.src && s.src.includes('bibtexParse.js')
+      );
       if (existing) {
-        // If it's already loaded but didn't attach, try waiting briefly
         const checkInterval = setInterval(() => {
-          if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+          if (getParser()) {
             clearInterval(checkInterval);
             resolve();
           }
         }, 50);
         // timeout after 2s
         setTimeout(() => {
-          if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') return;
+          if (getParser()) return;
           clearInterval(checkInterval);
           reject(new Error('bibtexParse did not initialize'));
         }, 2000);
         return;
       }
+
       // Otherwise dynamically insert the script
       const script = document.createElement('script');
       script.src = 'js/bibtexParse.js';
       script.onload = () => {
-        if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
+        if (getParser()) {
           resolve();
         } else {
           reject(new Error('bibtexParse loaded but did not initialize'));
