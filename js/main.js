@@ -269,11 +269,18 @@ function renderPublications(entries) {
       yearHeading.textContent = year;
       container.appendChild(yearHeading);
     }
-    const pubDiv = document.createElement('div');
-    pubDiv.className = 'publication';
-    const citation = formatCitation(entry);
-    pubDiv.innerHTML = citation;
-    container.appendChild(pubDiv);
+    // Ensure there's a list for the current year
+    let list = container.querySelector('ul.publication-list[data-year="' + currentYear + '"]');
+    if (!list) {
+      list = document.createElement('ul');
+      list.className = 'publication-list';
+      list.setAttribute('data-year', String(currentYear));
+      container.appendChild(list);
+    }
+    const li = document.createElement('li');
+    li.className = 'publication-item';
+    li.innerHTML = formatCitation(entry);
+    list.appendChild(li);
   });
 
 }

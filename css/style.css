@@ -282,6 +282,15 @@ section h2 {
     font-size: 1rem;
     line-height: 1.5;
 }
+
+/* Publication list styles: use bullets and add spacing */
+.publication-list {
+    margin: 0 0 1rem 1rem;
+    padding-left: 1rem;
+}
+.publication-item {
+    margin-bottom: 0.9rem; /* more space between publications */
+}
 .publication em {
     font-style: italic;
 }
