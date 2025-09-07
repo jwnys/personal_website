@@ -91,11 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof bibtexParse !== 'undefined' && bibtexParse && typeof bibtexParse.toJSON === 'function') {
         return bibtexParse;
       }
-      if (typeof exports !== 'undefined' && exports && typeof exports.toJSON === 'function') {
-        if (typeof window !== 'undefined') {
-          window.bibtexParse = exports;
+      if (typeof exports !== 'undefined' && exports) {
+        if (typeof exports.toJSON === 'function') {
+          if (typeof window !== 'undefined') {
+            window.bibtexParse = exports;
+          }
+          return exports;
         }
-        return exports;
+        if (exports.bibtexParse && typeof exports.bibtexParse.toJSON === 'function') {
+          if (typeof window !== 'undefined') {
+            window.bibtexParse = exports.bibtexParse;
+          }
+          return exports.bibtexParse;
+        }
       }
       return null;
     };

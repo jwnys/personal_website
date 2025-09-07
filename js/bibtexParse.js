@@ -21,5 +21,9 @@
     }
     return entries;
   }
-  root.bibtexParse={toJSON};
+  const api={toJSON};
+  root.bibtexParse=api;
+  if(typeof window!=='undefined'){
+    window.bibtexParse=api;
+  }
 })(typeof exports==='undefined'?this:exports);
