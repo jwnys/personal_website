@@ -293,6 +293,37 @@ function formatCitation(entry) {
     s = s.replace(/^\s*\{+|\}+\s*$/g, '');
     // Convert common LaTeX emphasis to <em>
     s = s.replace(/\\(?:emph|textit)\{([^}]*)\}/g, '<em>$1</em>');
+    // Convert common LaTeX accent commands to Unicode (handles braced and unbraced forms)
+    const accentMap = {
+      "'": { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú', y: 'ý', A: 'Á', E: 'É', I: 'Í', O: 'Ó', U: 'Ú', Y: 'Ý' },
+      '`': { a: 'à', e: 'è', i: 'ì', o: 'ò', u: 'ù', A: 'À', E: 'È', I: 'Ì', O: 'Ò', U: 'Ù' },
+      '^': { a: 'â', e: 'ê', i: 'î', o: 'ô', u: 'û', A: 'Â', E: 'Ê', I: 'Î', O: 'Ô', U: 'Û' },
+      '"': { a: 'ä', e: 'ë', i: 'ï', o: 'ö', u: 'ü', y: 'ÿ', A: 'Ä', E: 'Ë', I: 'Ï', O: 'Ö', U: 'Ü', Y: 'Ÿ' },
+      '~': { n: 'ñ', a: 'ã', o: 'õ', N: 'Ñ', A: 'Ã', O: 'Õ' },
+      c: { c: 'ç', C: 'Ç' },
+      v: { s: 'š', S: 'Š', c: 'č', C: 'Č', z: 'ž', Z: 'Ž' }
+    };
+    // handle accents like \'e or \'{e}
+    s = s.replace(/\\([`'\^\"~])\{?([A-Za-z])\}?/g, function(_, acc, ch) {
+      const table = accentMap[acc];
+      if (table && table[ch]) return table[ch];
+      // Try lowercase fallback
+      if (table && table[ch.toLowerCase()]) {
+        const out = table[ch.toLowerCase()];
+        return ch === ch.toUpperCase() ? out.toUpperCase() : out;
+      }
+      return ch;
+    });
+    // handle commands like \c{c} and \v{s}
+    s = s.replace(/\\([cv])\{?([A-Za-z])\}?/g, function(_, cmd, ch) {
+      const table = accentMap[cmd];
+      if (table && table[ch]) return table[ch];
+      if (table && table[ch.toLowerCase()]) {
+        const out = table[ch.toLowerCase()];
+        return ch === ch.toUpperCase() ? out.toUpperCase() : out;
+      }
+      return ch;
+    });
     // Remove math environments $...$ and \(...\)
     s = s.replace(/\$[^$]*\$/g, '');
     s = s.replace(/\\\([^)]*\\\)/g, '');
@@ -304,7 +335,7 @@ function formatCitation(entry) {
     s = s.replace(/---/g, '—').replace(/--/g, '–');
     // Remove other backslash commands like \textsuperscript{...} -> content
     s = s.replace(/\\[a-zA-Z]+\{([^}]*)\}/g, '$1');
-    // Remove remaining backslashes
+    // Remove remaining backslashes before letters
     s = s.replace(/\\([a-zA-Z]+)/g, '$1');
     // Strip leftover braces
     s = s.replace(/[{}]/g, '');
