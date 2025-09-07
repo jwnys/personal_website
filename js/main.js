@@ -418,7 +418,6 @@ function formatCitation(entry) {
   let authors = formatAuthors(tags.author || '');
   // Title: sanitize and italicize
   let title = sanitizeBibtex(tags.title || '');
-  if (title) title = `<em>${title}</em>`;
   // Venue: choose journal, booktitle, or school depending on entry type
   const venue = sanitizeBibtex(tags.journal || tags.booktitle || tags.school || '');
   // Pages if available
@@ -435,17 +434,15 @@ function formatCitation(entry) {
     // URL should be used as href raw (already sanitized for display)
     link = `. <a href="${url}" target="_blank" rel="noopener">link</a>`;
   }
-  // Compose final citation string
+  // Compose final citation string: title (normal) first, then venue/year/pages/link, authors last
   let citationParts = [];
-  // Title first
-  if (title) citationParts.push(title);
-  // Then authors
-  if (authors) citationParts.push(`${authors}.`);
-  // Venue, year, pages
+  if (title) citationParts.push(title + '.');
   if (venue) citationParts.push(venue);
   if (yearStr) citationParts.push(yearStr);
   if (pages) citationParts.push(pages);
-  const citation = citationParts.join(' ') + link;
+  const mainPart = citationParts.join(' ');
+  const citation = mainPart + (link ? link : '');
+  if (authors) return citation + ' ' + authors + '.';
   return citation;
 }
 
