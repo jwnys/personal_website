@@ -277,7 +277,8 @@ section h2 {
 }
 .publication {
     margin-left: 0.5rem;
-    margin-bottom: 0.8rem;
+    /* reduce bottom gap so authors line sits closer to the citation */
+    margin-bottom: 0.35rem;
     font-size: 1rem;
     line-height: 1.5;
 }
@@ -295,8 +296,11 @@ section h2 {
 /* Authors line for publications: no extra vertical whitespace and smaller font */
 .pub-authors {
     margin: 0; /* remove default paragraph margin */
+    padding: 0;
     font-size: 0.95rem;
+    line-height: 1.2; /* make the authors line more compact */
     color: #333;
+    display: block;
 }
 
 /* Project grid for wider screens */
