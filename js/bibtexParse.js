@@ -139,10 +139,9 @@
                         brcktCnt++;
                     if (this.input[this.pos] == '}')
                         brcktCnt--;
-                    if (this.pos >= this.input.length - 1) {
-                        throw TypeError("Unterminated value: value_comment", + 
-this.input.substring(start));
-                    };
+                        if (this.pos >= this.input.length - 1) {
+                            throw new TypeError("Unterminated value: value_comment " + this.input.substring(this.pos));
+                        };
                     this.pos++;
                 };
                 return str;
@@ -229,9 +228,7 @@ this.input.substring(start) + ' for key: ' + k;
                     key = key.trim()
                     return [ key, val ];
                 } else {
-                    throw TypeError("Value expected, equals sign missing: 
-key_equals_value",
-                         this.input.substring(this.pos));
+                    throw new TypeError("Value expected, equals sign missing: key_equals_value " + this.input.substring(this.pos));
                 };
             };
 
