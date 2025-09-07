@@ -339,6 +339,20 @@ function formatCitation(entry) {
     s = s.replace(/\\([a-zA-Z]+)/g, '$1');
     // Strip leftover braces
     s = s.replace(/[{}]/g, '');
+  // Convert common math macros to symbols and unwrap simple math fonts
+  s = s.replace(/\\(?:rightarrow|to)\b/g, '→');
+  s = s.replace(/\\leftrightarrow\b/g, '↔');
+  s = s.replace(/\\times\b/g, '×');
+  s = s.replace(/\\pm\b/g, '±');
+  s = s.replace(/\\cdot\b/g, '·');
+  s = s.replace(/\\approx\b/g, '≈');
+  s = s.replace(/\\ldots\b/g, '…');
+  // handle numeric patterns like '3 \rightarrow 3'
+  s = s.replace(/(\d)\s*(?:\\(?:rightarrow|to)|→|rightarrow)\s*(\d)/g, '$1→$2');
+  // Unwrap common math font commands like \mathbf{...} -> content
+  s = s.replace(/\\(?:mathbf|mathrm|mathit)\{([^}]*)\}/g, '$1');
+  // Remove stray literal tokens left by aggressive backslash removals (e.g. 'mathbf')
+  s = s.replace(/\b(?:mathbf|mathrm|mathit)\b\s*/g, '');
     // Escape HTML but allow <em> tags
     const openToken = '___EM_OPEN___';
     const closeToken = '___EM_CLOSE___';
@@ -425,21 +439,7 @@ function formatCitation(entry) {
   if (authors) citationParts.push(`${authors}.`);
   if (title) citationParts.push(title);
   if (venue) citationParts.push(venue);
-    // Convert common math macros to symbols
-    s = s.replace(/\\(?:rightarrow|to)\b/g, '→');
-    s = s.replace(/\\leftrightarrow\b/g, '↔');
-    s = s.replace(/\\times\b/g, '×');
-    s = s.replace(/\\pm\b/g, '±');
-    s = s.replace(/\\cdot\b/g, '·');
-    s = s.replace(/\\approx\b/g, '≈');
-    s = s.replace(/\\ldots\b/g, '…');
-    // handle numeric patterns like '3 \rightarrow 3' or '3rightarrow3'
-    s = s.replace(/(\d)\s*→\s*(\d)/g, '$1→$2');
-    s = s.replace(/(\d)\s*(?:\\(?:rightarrow|to)|rightarrow)\s*(\d)/g, '$1→$2');
-    // Unwrap common math font commands like \mathbf{...} -> content
-    s = s.replace(/\\(?:mathbf|mathrm|mathit)\{([^}]*)\}/g, '$1');
-    // Remove stray literal tokens left by aggressive backslash removals (e.g. 'mathbf')
-    s = s.replace(/\b(?:mathbf|mathrm|mathit)\b\s*/g, '');
+    
   if (yearStr) citationParts.push(yearStr);
   if (pages) citationParts.push(pages);
   const citation = citationParts.join(' ') + link;
