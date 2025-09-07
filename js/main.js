@@ -442,7 +442,10 @@ function formatCitation(entry) {
   if (pages) citationParts.push(pages);
   const mainPart = citationParts.join(' ');
   const citation = mainPart + (link ? link : '');
-  if (authors) return citation + ' ' + authors + '.';
+  if (authors) {
+    // show authors on their own line with a label
+    return citation + ' <p class="pub-authors">Authors: ' + authors + '.</p>';
+  }
   return citation;
 }
 
