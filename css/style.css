@@ -292,6 +292,13 @@ section h2 {
     text-decoration: underline;
 }
 
+/* Authors line for publications: no extra vertical whitespace and smaller font */
+.pub-authors {
+    margin: 0; /* remove default paragraph margin */
+    font-size: 0.95rem;
+    color: #333;
+}
+
 /* Project grid for wider screens */
 .project-grid {
     display: grid;
