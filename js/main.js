@@ -437,10 +437,12 @@ function formatCitation(entry) {
   }
   // Compose final citation string
   let citationParts = [];
-  if (authors) citationParts.push(`${authors}.`);
+  // Title first
   if (title) citationParts.push(title);
+  // Then authors
+  if (authors) citationParts.push(`${authors}.`);
+  // Venue, year, pages
   if (venue) citationParts.push(venue);
-    
   if (yearStr) citationParts.push(yearStr);
   if (pages) citationParts.push(pages);
   const citation = citationParts.join(' ') + link;
