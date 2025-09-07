@@ -285,16 +285,46 @@ function renderPublications(entries) {
  */
 function formatCitation(entry) {
   const tags = entry.entryTags || {};
-  // Authors: replace ' and ' with ', ' and remove extraneous braces
-  let authors = (tags.author || '').replace(/\s+and\s+/g, ', ');
-  authors = authors.replace(/[{}]/g, '');
-  // Keep author names as-is (no bolding applied)
-  // Title: remove outer braces and trim
-  let title = (tags.title || '').replace(/[{}]/g, '');
-  // Italicize the title in HTML
-  title = `<em>${title}</em>`;
+  // Helper: normalize BibTeX values to readable HTML-safe text
+  function sanitizeBibtex(raw) {
+    if (!raw) return '';
+    let s = String(raw);
+    // Remove wrapping braces
+    s = s.replace(/^\s*\{+|\}+\s*$/g, '');
+    // Convert common LaTeX emphasis to <em>
+    s = s.replace(/\\(?:emph|textit)\{([^}]*)\}/g, '<em>$1</em>');
+    // Remove math environments $...$ and \(...\)
+    s = s.replace(/\$[^$]*\$/g, '');
+    s = s.replace(/\\\([^)]*\\\)/g, '');
+    // Replace LaTeX escaped ampersand and common escapes
+    s = s.replace(/\\&/g, '&');
+    // Replace non-breaking tilde with space
+    s = s.replace(/~/g, ' ');
+    // Dashes: --- -> em dash, -- -> en dash
+    s = s.replace(/---/g, '—').replace(/--/g, '–');
+    // Remove other backslash commands like \textsuperscript{...} -> content
+    s = s.replace(/\\[a-zA-Z]+\{([^}]*)\}/g, '$1');
+    // Remove remaining backslashes
+    s = s.replace(/\\([a-zA-Z]+)/g, '$1');
+    // Strip leftover braces
+    s = s.replace(/[{}]/g, '');
+    // Escape HTML but allow <em> tags
+    const openToken = '___EM_OPEN___';
+    const closeToken = '___EM_CLOSE___';
+    s = s.replace(/<em>/g, openToken).replace(/<\/em>/g, closeToken);
+    s = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+         .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    s = s.replace(new RegExp(openToken, 'g'), '<em>').replace(new RegExp(closeToken, 'g'), '</em>');
+    return s.trim();
+  }
+
+  // Authors: replace ' and ' with ', ' and sanitize
+  let authors = sanitizeBibtex((tags.author || '').replace(/\s+and\s+/g, ', '));
+  // Title: sanitize and italicize
+  let title = sanitizeBibtex(tags.title || '');
+  if (title) title = `<em>${title}</em>`;
   // Venue: choose journal, booktitle, or school depending on entry type
-  const venue = tags.journal || tags.booktitle || tags.school || '';
+  const venue = sanitizeBibtex(tags.journal || tags.booktitle || tags.school || '');
   // Pages if available
   const pages = tags.pages ? `, ${tags.pages}` : '';
   // Year parentheses
@@ -302,10 +332,11 @@ function formatCitation(entry) {
   // DOI or URL link
   let link = '';
   if (tags.doi) {
-    const doi = tags.doi.trim();
+    const doi = sanitizeBibtex(tags.doi.trim());
     link = `. <a href="https://doi.org/${doi}" target="_blank" rel="noopener">DOI</a>`;
   } else if (tags.url) {
-    const url = tags.url.trim();
+    const url = sanitizeBibtex(tags.url.trim());
+    // URL should be used as href raw (already sanitized for display)
     link = `. <a href="${url}" target="_blank" rel="noopener">link</a>`;
   }
   // Compose final citation string
