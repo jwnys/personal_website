@@ -318,8 +318,40 @@ function formatCitation(entry) {
     return s.trim();
   }
 
-  // Authors: replace ' and ' with ', ' and sanitize
-  let authors = sanitizeBibtex((tags.author || '').replace(/\s+and\s+/g, ', '));
+  // Format authors: handle "Last, First" and "First Last" styles and join
+  function formatAuthorName(name) {
+    if (!name) return '';
+    // sanitize small bits first
+    let s = sanitizeBibtex(name);
+    // collapse whitespace
+    s = s.replace(/\s+/g, ' ').trim();
+    // If 'Last, First' form, invert
+    if (s.indexOf(',') >= 0) {
+      const parts = s.split(',');
+      const last = parts[0].trim();
+      const first = parts.slice(1).join(',').trim();
+      return (first + ' ' + last).trim();
+    }
+    // Otherwise assume last token is last name
+    const tokens = s.split(' ');
+    if (tokens.length <= 1) return s;
+    const last = tokens[tokens.length - 1];
+    const first = tokens.slice(0, tokens.length - 1).join(' ');
+    return (first + ' ' + last).trim();
+  }
+
+  function formatAuthors(raw) {
+    if (!raw) return '';
+    // split on ' and ' (BibTeX separator)
+    const parts = raw.split(/\s+and\s+/i).map(p => p.trim()).filter(Boolean);
+    const names = parts.map(formatAuthorName).filter(Boolean);
+    if (names.length === 0) return '';
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return names[0] + ' and ' + names[1];
+    return names.slice(0, -1).join(', ') + ', and ' + names[names.length - 1];
+  }
+
+  let authors = formatAuthors(tags.author || '');
   // Title: sanitize and italicize
   let title = sanitizeBibtex(tags.title || '');
   if (title) title = `<em>${title}</em>`;
