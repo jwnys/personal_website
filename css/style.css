@@ -1,0 +1,287 @@
+/* Root variables for colours and typography */
+:root {
+    --primary-color: #0f1a2b;
+    --accent-color: #7f5af0;
+    --text-color: #333;
+    --light-text: #f5f5f5;
+    --link-color: #5555ff;
+    --section-padding: 60px;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+body {
+    margin: 0;
+    color: var(--text-color);
+    background-color: #ffffff;
+}
+
+/* Container utility */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Navigation bar */
+/* Navigation bar styles
+   Use a light background and dark text to better match a light‑themed site.
+   Remove the backdrop blur used in the dark version and instead apply a subtle
+   drop shadow for separation from the hero section. */
+.navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff;
+    color: var(--primary-color);
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+/* Logo inherits the primary colour on a light background */
+.logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Nav toggle for small screens */
+.nav-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+/* Navigation links use the primary colour and change to accent on hover */
+.nav-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.nav-links a:hover {
+    color: var(--accent-color);
+}
+
+/* Hero section */
+.hero-section {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Use the same background image but apply a light overlay via ::before */
+    color: var(--primary-color);
+    background-image: url('../images/hero.png');
+    background-size: cover;
+    background-position: center;
+}
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Lighten the hero image instead of darkening it */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.8));
+    z-index: 0;
+}
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: left;
+}
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+.hero-content h1 .highlight {
+    color: var(--accent-color);
+}
+.tagline {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+/* Style for the dynamic typed text in the hero tagline.  The accent colour
+   emphasises the current phrase and the border creates a blinking cursor. */
+#typed-text {
+    color: var(--accent-color);
+    border-right: 2px solid var(--accent-color);
+    padding-right: 2px;
+    animation: blinkCursor 0.8s steps(1) infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 50% { border-color: var(--accent-color); }
+    51%, 100% { border-color: transparent; }
+}
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+/* Icons are used as SVGs; remove invert filter on light background and reduce opacity slightly */
+.social-icons a img {
+    width: 24px;
+    height: 24px;
+    filter: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+.social-icons a img:hover {
+    opacity: 1;
+}
+
+/* Section headings */
+section h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+/* About section */
+.about-section {
+    padding: var(--section-padding) 0;
+    background-color: #fdfdfd;
+}
+.about-section p {
+    max-width: 800px;
+    font-size: 1.1rem;
+}
+
+/* Projects section */
+.projects-section {
+    padding: var(--section-padding) 0;
+    background-color: #ffffff;
+}
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.project {
+    background: #f5f5fa;
+    border-left: 4px solid var(--accent-color);
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+}
+.project h3 {
+    margin-top: 0;
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+.project p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Publications section */
+.publications-section {
+    padding: var(--section-padding) 0;
+    background-color: #f9f9ff;
+}
+.publications-section .note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+.publications-section h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--accent-color);
+    display: inline-block;
+}
+.publication {
+    margin-left: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+.publication em {
+    font-style: italic;
+}
+.publication a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+.publication a:hover {
+    text-decoration: underline;
+}
+
+/* Project grid for wider screens */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+.project-card {
+    background: #fff;
+    border: 1px solid #eef0f6;
+    padding: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(15,26,43,0.04);
+}
+.project-card .meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* Small-screen responsive tweaks */
+@media screen and (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: inline-block; }
+    .nav-links.open { display: flex; flex-direction: column; gap: 0.5rem; background: #fff; padding: 10px; position: absolute; right: 10px; top: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 6px; }
+}
+
+/* Warning message for publication loading errors */
+.warning {
+    color: #b33;
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+/* Footer */
+footer {
+    background: var(--primary-color);
+    color: var(--light-text);
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Responsive behaviour */
+@media screen and (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .tagline {
+        font-size: 1rem;
+    }
+    .project {
+        padding: 0.8rem 1rem;
+    }
+}

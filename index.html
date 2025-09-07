@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jannes Nys – Quantum & ML Researcher</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header id="home" class="hero-section">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="logo">Jannes Nys</div>
+                <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="hero-content">
+            <div class="container">
+                <h1>Hi, I'm <span class="highlight">Jannes Nys</span></h1>
+                <!-- Tagline with dynamic typing effect.  The typed words will be injected via JS -->
+                <p class="tagline">Research scientist at the intersection of <span id="typed-text"></span></p>
+                <div class="social-icons">
+                    <a href="https://linkedin.com/in/jannes-nys-7793b6b9" target="_blank" rel="noopener" title="LinkedIn">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/linkedin.svg" alt="LinkedIn" />
+                    </a>
+                    <a href="https://orcid.org/0000-0001-7491-3660" target="_blank" rel="noopener" title="ORCID">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/orcid.svg" alt="ORCID" />
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=uVWYr08AAAAJ" target="_blank" rel="noopener" title="Google Scholar">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/googlescholar.svg" alt="Google Scholar" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- About / Profile Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>About Me</h2>
+                <p>I'm a research scientist with more than nine years' experience working at the intersection of quantum many‑body physics, machine learning and high‑performance computing. I develop scalable algorithms — both classical and quantum — for simulating electronic matter and quantum dynamics and translate research into robust code. Recently, I have advanced neural‑quantum‑state methods and variational time‑evolution schemes at ETH Zürich and EPFL, with results published in <em>Nature Communications</em> and <em>Nature Physics</em>. My background spans leading cross‑disciplinary teams, industry collaborations and grant‑funded research programmes.</p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section">
+            <div class="container">
+                <h2>Projects &amp; Experience</h2>
+                <div class="project-list">
+                    <div class="project">
+                        <h3>Senior Research Assistant – ETH Zürich (10/2024 – Present)</h3>
+                        <p>Developing computational methods for strongly correlated materials and quantum device simulation (digital &amp; analog); building high‑performance code for large‑scale many‑body simulations across multi‑GPU platforms.</p>
+                    </div>
+                    <div class="project">
+                        <h3>Post‑doctoral Researcher – EPFL (10/2021 – 09/2024)</h3>
+                        <p>Designed novel time‑propagator expansions and variational time‑evolution methods for electronic matter; built neural network architectures for quantum systems; secured partnership funding with Microsoft Research and delivered ML techniques for 2D materials.</p>
+                    </div>
+                    <div class="project">
+                        <h3>Principal Investigator, AI4Science – IMEC &amp; University of Antwerp (10/2020 – 09/2021)</h3>
+                        <p>Led research projects on scientific machine learning, topological data analysis and causal machine learning; promoted to principal investigator and supervised a PhD student through cross‑institutional collaborations.</p>
+                    </div>
+                    <div class="project">
+                        <h3>Co‑founder &amp; Head of Machine Learning – Boltzmann (2018 – 2020)</h3>
+                        <p>Led a ten‑person ML consulting team delivering R&amp;D projects, launched an NLP anomaly‑detection product adopted across the Belgian bookkeeping industry and oversaw acquisition by Silverfin.</p>
+                    </div>
+                    <div class="project">
+                        <h3>Scientific Advisor – BioClue (2019 – 2020)</h3>
+                        <p>Prototyped a novel DNA sequencing and search‑and‑retrieval model using HYFT patterns, contributing to €2&nbsp;M external investment and subsequent acquisition by IPA.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="publications" class="publications-section">
+            <div class="container">
+                <h2>Publications</h2>
+                <p class="note">This list is automatically generated from my BibTeX file and includes both published works and recent preprints. Where available, DOI links point to the published version.</p>
+                <div id="publications-container"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Jannes Nys. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/bibtexParse.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
