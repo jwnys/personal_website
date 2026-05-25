@@ -34,6 +34,7 @@ body {
 }
 
 a { color: var(--accent-color); }
+.accent { color: var(--accent-color); font-weight: 500; font-style: normal; }
 
 /* ---------- Navbar ---------- */
 .navbar {
@@ -128,6 +129,17 @@ a { color: var(--accent-color); }
     font-size: 1.1rem;
     margin: 0;
     color: var(--primary-color);
+}
+.affiliation {
+    margin: 0.2rem 0 0;
+    font-size: 1rem;
+    color: var(--muted-color);
+}
+.affiliation a {
+    text-decoration: none;
+}
+.affiliation a:hover {
+    text-decoration: underline;
 }
 #typed-text {
     color: var(--accent-color);

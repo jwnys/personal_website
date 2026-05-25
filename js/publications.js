@@ -28,7 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return Promise.reject(new Error('No bib file found'));
     }
     const path = bibCandidates[idx];
-    return fetch(path)
+    // cache-bust: append a timestamp so the browser always re-fetches the .bib file
+    const sep = path.indexOf('?') >= 0 ? '&' : '?';
+    return fetch(path + sep + 't=' + Date.now(), { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) {
           attemptDetails.push({ url: path, ok: false, status: res.status, statusText: res.statusText });

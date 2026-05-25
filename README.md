@@ -2,12 +2,15 @@
 
 A small, static personal website. No frameworks, no build step. Just HTML, CSS, and a sprinkle of JavaScript that parses a BibTeX file in the browser to render the publications page.
 
+**Repo:** <https://github.com/jwnys/personal_website>
+**Live:** <https://jannesnys.com> (once DNS is set — see [Publishing](#publishing-to-jannesnyscom) below)
+
 ## Pages
 
 | File | What it is |
 |---|---|
-| `index.html` | Home: hero, about, research-by-topic, selected publications, background |
-| `publications.html` | Full publications list, auto-rendered from `data/biblio.bib` |
+| `index.html` | Home: hero, about, research-by-topic, background |
+| `publications.html` | Selected list + full publications, auto-rendered from `data/biblio.bib` |
 | `blog/` | Scaffold for a Distill-style blog. **Not linked from the public site.** |
 
 ## Structure
@@ -15,15 +18,15 @@ A small, static personal website. No frameworks, no build step. Just HTML, CSS, 
 ```
 .
 ├── index.html              # home
-├── publications.html       # auto-generated from BibTeX
+├── publications.html       # selected pubs (hand-curated) + full list (from BibTeX)
 ├── css/style.css
 ├── data/biblio.bib         # canonical publications list
-├── images/profile_pic.jpg
+├── images/profile_pic2.jpg # the photo used on the home page
 ├── js/
 │   ├── site.js             # nav toggle, typed-text effect, footer year
 │   ├── bibtexParse.js      # 3rd-party BibTeX -> JSON parser
 │   └── publications.js     # fetch + render publications page
-└── blog/                   # hidden until you link to it from the nav
+└── blog/                   # hidden — no nav link
     ├── index.html          # list of posts
     ├── _template.html      # copy this to start a new post
     └── posts/              # your posts go here
@@ -35,7 +38,7 @@ A small, static personal website. No frameworks, no build step. Just HTML, CSS, 
 
 The site fetches `data/biblio.bib` at runtime, and browsers block `fetch()` on `file://`. So you must serve it through a tiny local HTTP server — opening `index.html` directly will only half-work (the publications page will be empty).
 
-From the project root (`current/jannes_nys_white_site/`):
+From this folder:
 
 ```bash
 python3 -m http.server 8000
@@ -43,14 +46,14 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000>. Edit any file, refresh the browser. Done.
 
-Other equivalents if you'd rather not use Python:
+Equivalents:
 
 ```bash
-npx serve .             # Node
-ruby -run -e httpd . -p 8000   # Ruby
+npx serve .                       # Node
+ruby -run -e httpd . -p 8000      # Ruby
 ```
 
-The home page works fine on phones — the navbar collapses behind the ☰ button below ~768 px wide.
+`publications.js` cache-busts the `.bib` fetch on every load, so a normal refresh always picks up new BibTeX entries. If you edit CSS or JS, do a hard refresh once (`Cmd+Shift+R`) — those are versioned via `?v=N` in the HTML.
 
 ---
 
@@ -58,7 +61,7 @@ The home page works fine on phones — the navbar collapses behind the ☰ butto
 
 Everything is plain text. Edit, save, refresh.
 
-### Update the about / research / background text
+### About / research / background text
 Open `index.html` and edit. Look for the `<section id="…">` blocks.
 
 ### Add a publication
@@ -68,78 +71,81 @@ Open `index.html` and edit. Look for the `<section id="…">` blocks.
 
 Recommended BibTeX fields: `title`, `author`, `journal` (or `booktitle`), `year`, `doi` (or `url`). Authors use BibTeX's `"Last, First and Last, First"` (or `"First Last and First Last"`) form — the parser handles both.
 
-### Promote a paper into "Selected publications" on the home page
-The selected list is hand-curated in `index.html` (inside `<section id="selected">`). Copy an existing `<li class="selected-item">…</li>` block, edit the title, venue, year, DOI/URL, and authors. Bold your own name with `<strong>J. Nys</strong>`.
+For the bib key, the convention used here is `lastnameYYYYkeyword` matching the publication year (e.g. `nys2024ab` for a 2024 paper). The site sorts by the `year` field, not the key — keys are just labels.
+
+### Promote a paper into "Selected publications"
+The selected list at the top of `publications.html` is hand-curated. Copy an existing `<li class="selected-item">…</li>` block, edit the title, venue, year, DOI/URL, and authors. Bold your own name with `<strong>J. Nys</strong>`.
 
 ### Change the typed phrases in the hero
 Edit the `typedPhrases` array in `js/site.js`.
 
 ### Swap the profile picture
-Replace `images/profile_pic.jpg` (square crop looks best).
+Replace the image in `images/` and update the `<img src="…">` in `index.html`.
 
 ---
 
 ## Publishing to jannesnys.com
 
-You have two reasonable options. **I recommend GitHub Pages** — it's free, runs out of a Git repo, and handles HTTPS + your custom domain for you.
+The site is hosted on **GitHub Pages** out of the [`jwnys/personal_website`](https://github.com/jwnys/personal_website) repo.
 
-### Option A — GitHub Pages (recommended)
+### One-time setup
 
-One-time setup:
-
-1. Create a new repo on GitHub (e.g. `jannesnys/jannesnys.com`).
-2. Push this folder to it:
+1. **Push the repo.** If you've made local changes, commit and push:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial site"
-   git branch -M main
-   git remote add origin git@github.com:jannesnys/jannesnys.com.git
+   git add -A
+   git commit -m "Update site"
    git push -u origin main
    ```
-3. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch → Branch: `main` / root**.
-4. **Settings → Pages → Custom domain**: enter `jannesnys.com`. GitHub will give you DNS instructions and tell you the IP addresses to point to.
-5. At your domain registrar (where you bought `jannesnys.com`), set DNS records:
-   - Four `A` records on the apex (`@`) pointing to GitHub's IPs:
-     `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
-   - A `CNAME` record `www` → `jannesnys.github.io.`
-   (These are the GitHub Pages defaults; check the Pages settings page for the current canonical values.)
-6. Back on GitHub Pages settings, tick **Enforce HTTPS** once it becomes available (a few minutes).
-7. A file named `CNAME` containing `jannesnys.com` will be created automatically by GitHub; don't delete it.
 
-To publish updates after that:
+2. **Enable Pages.** Open <https://github.com/jwnys/personal_website/settings/pages>:
+   - *Source*: **Deploy from a branch**
+   - *Branch*: `main` / `/ (root)` → **Save**
+
+3. **Verify the staging URL works** (~30 sec after save):
+   <https://jwnys.github.io/personal_website/>
+
+4. **Set the custom domain.** Same Pages settings page → *Custom domain* field:
+   - Enter `jannesnys.com` → **Save**.
+   - This creates a `CNAME` file in the repo — **don't delete it**.
+
+5. **Point DNS at GitHub.** At your domain registrar's DNS panel, add **5 records** (delete any existing records on `@` or `www` first):
+
+   | Type | Name | Value |
+   |---|---|---|
+   | A | @ | 185.199.108.153 |
+   | A | @ | 185.199.109.153 |
+   | A | @ | 185.199.110.153 |
+   | A | @ | 185.199.111.153 |
+   | CNAME | www | jwnys.github.io. |
+
+6. **Wait, then enable HTTPS.** DNS propagation usually takes 5–30 min. Check with:
+   ```bash
+   dig jannesnys.com +short
+   ```
+   You should see the four GitHub IPs. Back on Pages settings, tick **Enforce HTTPS** once the DNS check turns green (GitHub provisions a Let's Encrypt cert automatically).
+
+### Future updates
+
+Every edit after that goes live with:
 
 ```bash
 git add -A
-git commit -m "tweak about"
+git commit -m "your message"
 git push
 ```
 
-GitHub rebuilds in ~30 seconds.
+GitHub rebuilds in ~30 seconds. No build step on your end.
 
-### Option B — Upload to your existing web host
+### Prerequisites
 
-If you already have shared hosting (you have a `public_html/` next to this folder, suggesting cPanel-style hosting), you can rsync/SFTP this folder to it:
-
-```bash
-# example with rsync — adjust user@host and remote path
-rsync -avz --delete \
-  ./ user@host:~/public_html/
-```
-
-(You'll want to exclude `.git`, `README.md`, and anything else you don't want public — add a `--exclude` for each, or keep a separate deployment folder.)
-
-Then point your domain's DNS to that host — your hosting provider will tell you the exact records.
-
-### Other one-click hosts
-
-- **Netlify** or **Cloudflare Pages**: drag-and-drop or connect a Git repo. Custom domain config is in their dashboard, same DNS idea.
+- **Repo must be public.** GitHub Pages requires a paid plan on private repos. Toggle at *Settings → General → Danger zone → Change visibility → Public*.
+- **`.DS_Store`** shouldn't be committed. Add it to `.gitignore` if it isn't already.
 
 ---
 
 ## Adding a blog post (Distill-style, no build step)
 
-The blog lives under `blog/` and is **not linked from the navigation** — so it's invisible to visitors until you wire it up.
+The blog lives under `blog/` and is **not linked from the navigation** — invisible to visitors until you wire it up.
 
 To add a post:
 
@@ -177,5 +183,5 @@ When you want to expose it:
 
 ## Notes
 
-- The site loads three external resources: Google Fonts (Roboto), `simple-icons` SVGs from jsDelivr, and (for blog posts only) the Distill template. Everything else is local.
+- The site loads three external resources: Google Fonts (Roboto + Roboto Slab), `simple-icons` SVGs from jsDelivr, and (for blog posts only) the Distill template. Everything else is local.
 - The `<script id="inline-bib">` block in `publications.html` is a tiny fallback used only if `data/biblio.bib` can't be fetched (e.g. when someone opens the file directly via `file://`).
