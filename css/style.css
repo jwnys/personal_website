@@ -1,43 +1,49 @@
-/* Root variables for colours and typography */
+/* ---------- Tokens ---------- */
 :root {
-    --primary-color: #08263f; /* navy blue primary */
-    --accent-color: #1f6feb;  /* bright blue accent */
-    --text-color: #333;
+    --primary-color: #08263f;
+    --accent-color: #1f6feb;
+    --text-color: #2a2a2a;
+    --muted-color: #6a6a6a;
+    --light-bg: #fafafa;
     --light-text: #f5f5f5;
-    --link-color: #5555ff;
-    --section-padding: 60px;
-    font-family: 'Roboto', sans-serif;
+    --rule: #ececec;
+    --section-padding: 44px;
+    --font-body: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-head: 'Roboto Slab', Georgia, serif;
+    font-family: var(--font-body);
     line-height: 1.6;
 }
+
+h1, h2, h3, h4, h5, h6, .logo {
+    font-family: var(--font-head);
+}
+
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
     color: var(--text-color);
     background-color: #ffffff;
+    padding-top: 56px; /* offset for fixed navbar */
 }
 
-/* Container utility */
 .container {
     width: 90%;
-    max-width: 1100px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
-/* Navigation bar */
-/* Navigation bar styles
-   Use a light background and dark text to better match a light‑themed site.
-   Remove the backdrop blur used in the dark version and instead apply a subtle
-   drop shadow for separation from the hero section. */
+a { color: var(--accent-color); }
+
+/* ---------- Navbar ---------- */
 .navbar {
-    position: fixed; /* keep the nav at the top of the viewport */
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0;
     width: 100%;
     background-color: #ffffff;
     color: var(--primary-color);
     z-index: 1100;
-    box-shadow: 0 4px 12px rgba(8, 38, 63, 0.06);
+    box-shadow: 0 1px 0 var(--rule);
 }
 .nav-container {
     display: flex;
@@ -45,21 +51,31 @@ body {
     justify-content: space-between;
     padding: 10px 0;
 }
-/* Logo inherits the primary colour on a light background */
 .logo {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-color);
+    text-decoration: none;
 }
 .nav-links {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 1rem;
+    gap: 1.2rem;
+    flex-wrap: wrap;
 }
-
-/* Nav toggle for small screens */
+.nav-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+    color: var(--accent-color);
+}
 .nav-toggle {
     display: none;
     background: transparent;
@@ -68,101 +84,59 @@ body {
     cursor: pointer;
     color: var(--primary-color);
 }
-/* Navigation links use the primary colour and change to accent on hover */
-.nav-links a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-.nav-links a:hover {
-    color: var(--accent-color);
-}
 
-/* Hero section */
+/* ---------- Hero ---------- */
 .hero-section {
-    position: relative;
-    height: 60vh;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* center the hero block horizontally on the page */
-    /* keep the hero white and simple (no generic image) */
+    background: #ffffff;
+    padding: 18px 0 8px;
     color: var(--primary-color);
-    background-color: #ffffff;
+    /* defensive: never inherit any leftover flex/height that would center vertically */
+    display: block;
+    height: auto;
+    min-height: 0;
 }
-.hero-section::before { display: none; }
-.hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: left; /* keep text left-aligned inside the centered block */
-    max-width: 720px; /* fixed width for the hero block */
-    margin: 0 auto; /* center the block within the hero section */
-    padding: 0 2%;
-}
-.hero-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-}
+.hero-content { padding-top: 0; }
 .hero-top {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.6rem;
+    flex-wrap: wrap;
 }
 .profile-pic-wrap {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
+    width: 150px;
+    height: 200px;
+    border-radius: 12px;
     overflow: hidden;
-    display: inline-block;
-    position: relative;
-    flex: 0 0 72px;
+    flex: 0 0 150px;
     box-shadow: 0 6px 18px rgba(8,38,63,0.08);
-    background: linear-gradient(135deg, rgba(31,111,235,0.06), rgba(8,38,63,0.03));
-    border: 2px solid rgba(31,111,235,0.12);
-    transform: translateZ(0);
+    border: 1px solid var(--rule);
     animation: picIn 700ms ease both;
+    background: var(--light-bg);
 }
-.profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.profile-pic { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
 @keyframes picIn {
-    from { opacity: 0; transform: scale(0.9); }
+    from { opacity: 0; transform: scale(0.92); }
     to { opacity: 1; transform: scale(1); }
 }
-.hero-content h1 .highlight {
-    color: var(--accent-color);
+.hero-content h1 {
+    font-size: 2.4rem;
+    margin: 0 0 0.3rem;
+    font-weight: 700;
 }
+.hero-content h1 .highlight { color: var(--accent-color); }
 .tagline {
-    font-size: 1.2rem;
-    max-width: 600px;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    margin: 0;
     color: var(--primary-color);
 }
-
-/* Style for the dynamic typed text in the hero tagline.  The accent colour
-   emphasises the current phrase and the border creates a blinking cursor. */
 #typed-text {
     color: var(--accent-color);
     border-right: 2px solid var(--accent-color);
     padding-right: 2px;
+    display: inline-block;
+    min-width: 240px;
     animation: blinkCursor 0.8s steps(1) infinite;
 }
-
-/* Reserve some horizontal space for the typed phrases so the surrounding
-   block doesn't shift while text is typed/erased. Adjust min-width if you
-   add longer phrases. */
-#typed-text {
-    display: inline-block;
-    /* reserve space for the longest phrase to avoid reflow; increased to
-       approximate the longest phrase length used in the scripts */
-    min-width: 320px;
-}
-
 @keyframes blinkCursor {
     0%, 50% { border-color: var(--accent-color); }
     51%, 100% { border-color: transparent; }
@@ -170,182 +144,165 @@ body {
 .social-icons {
     display: flex;
     gap: 1rem;
+    margin-top: 0.9rem;
 }
-/* Icons are used as SVGs; remove invert filter on light background and reduce opacity slightly */
 .social-icons a img {
-    width: 24px;
-    height: 24px;
-    filter: none;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
+    width: 22px;
+    height: 22px;
+    opacity: 0.65;
+    transition: opacity 0.2s ease;
 }
-.social-icons a img:hover {
-    opacity: 1;
-}
+.social-icons a img:hover { opacity: 1; }
 
-/* Ensure body content is not hidden under the fixed navbar */
-body {
-    margin: 0;
-    color: var(--text-color);
-    background-color: #ffffff;
-    padding-top: 64px; /* height of navbar to offset fixed position */
-}
+/* publications page slim header (no hero) */
+.page-header { background: transparent; }
 
-/* Section headings */
+/* ---------- Sections ---------- */
+section { padding: var(--section-padding) 0; }
 section h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.7rem;
+    margin: 0 0 0.8rem;
     color: var(--primary-color);
+    font-weight: 700;
+}
+section h3 {
+    font-size: 1.15rem;
+    color: var(--primary-color);
+    margin: 0 0 0.4rem;
+}
+.section-intro {
+    color: var(--muted-color);
+    margin: 0 0 1.5rem;
+    max-width: 720px;
+}
+.note {
+    color: var(--muted-color);
+    font-size: 0.92rem;
 }
 
-/* About section */
-.about-section {
-    padding: var(--section-padding) 0;
-    background-color: #fdfdfd;
-}
+.about-section { background-color: var(--light-bg); }
 .about-section p {
-    max-width: 800px;
-    font-size: 1.1rem;
+    max-width: 720px;
+    font-size: 1.02rem;
+    margin: 0 0 0.9rem;
 }
 
-.education-section {
-    padding: var(--section-padding) 0;
-    background-color: #ffffff;
+/* ---------- Research topics ---------- */
+.research-section .topic {
+    padding: 1rem 0 1.2rem;
+    border-top: 1px solid var(--rule);
 }
-.education-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.research-section .topic:first-of-type {
+    border-top: none;
+    padding-top: 0;
 }
-.education-item {
-    background: #fff;
-    border-left: 4px solid var(--accent-color);
-    padding: 0.9rem 1rem;
-    border-radius: 6px;
+.research-section .topic p {
+    margin: 0;
+    max-width: 720px;
 }
-.education-item .meta {
-    color: #666;
+
+/* ---------- Selected publications (curated list on home) ---------- */
+.selected-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.selected-item {
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--rule);
+}
+.selected-item:first-child { border-top: none; }
+.selected-item h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.25rem;
+    font-weight: 600;
+}
+.selected-item .venue {
+    margin: 0;
     font-size: 0.95rem;
-    margin-bottom: 0.4rem;
+    color: var(--muted-color);
+}
+.selected-item .pub-authors {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    color: var(--muted-color);
 }
 
-/* Projects section */
-.projects-section {
-    padding: var(--section-padding) 0;
-    background-color: #ffffff;
+/* ---------- Background timeline ---------- */
+.education-section { background-color: #ffffff; }
+.subhead {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted-color);
+    margin: 1.2rem 0 0.6rem;
+    font-weight: 600;
 }
-.project-list {
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+}
+.timeline li {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--rule);
+    font-size: 0.98rem;
 }
-.project {
-    background: #f5f5fa;
-    border-left: 4px solid var(--accent-color);
-    padding: 1rem 1.5rem;
-    border-radius: 4px;
+.timeline li:first-child { border-top: none; }
+.timeline .date {
+    flex: 0 0 130px;
+    color: var(--muted-color);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.93rem;
 }
-.project h3 {
-    margin-top: 0;
-    margin-bottom: 0.3rem;
-    font-size: 1.2rem;
+.timeline .role { flex: 1; }
+
+/* ---------- Publications page (auto-rendered) ---------- */
+.publications-section { background-color: #ffffff; }
+.publications-section h1 {
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem;
     color: var(--primary-color);
 }
-.project p {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-/* Publications section */
-.publications-section {
-    padding: var(--section-padding) 0;
-    background-color: #f9f9ff;
-}
-.publications-section .note {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 1rem;
+.subhead-section {
+    font-size: 1.2rem;
+    margin: 2rem 0 0.6rem;
+    color: var(--primary-color);
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--rule);
 }
 .publications-section h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
+    margin-top: 1.6rem;
+    margin-bottom: 0.4rem;
+    font-size: 1.2rem;
     color: var(--primary-color);
     border-bottom: 2px solid var(--accent-color);
     display: inline-block;
 }
-.publication {
-    margin-left: 0.5rem;
-    /* reduce bottom gap so authors line sits closer to the citation */
-    margin-bottom: 0.35rem;
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-/* Publication list styles: use bullets and add spacing */
 .publication-list {
     margin: 0 0 1rem 1rem;
     padding-left: 1rem;
 }
 .publication-item {
-    margin-bottom: 0.9rem; /* more space between publications */
+    margin-bottom: 0.9rem;
+    line-height: 1.5;
 }
-.publication em {
-    font-style: italic;
-}
-.publication a {
-    color: var(--accent-color);
-    text-decoration: none;
-}
-.publication a:hover {
-    text-decoration: underline;
-}
-
-/* Authors line for publications: no extra vertical whitespace and smaller font */
+.publication-item em { font-style: italic; }
+.publication-item a { text-decoration: none; }
+.publication-item a:hover { text-decoration: underline; }
 .pub-authors {
-    margin: 0; /* remove default paragraph margin */
-    padding: 0;
-    font-size: 0.95rem;
-    line-height: 1.2; /* make the authors line more compact */
-    color: #333;
-    display: block;
+    margin: 0.1rem 0 0;
+    font-size: 0.93rem;
+    color: var(--muted-color);
 }
 
-/* Project grid for wider screens */
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-}
-.project-card {
-    background: #fff;
-    border: 1px solid #eef0f6;
-    padding: 1.1rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(15,26,43,0.04);
-}
-.project-card .meta {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.5rem;
-}
+/* ---------- Diagnostics / warnings ---------- */
+.warning { color: #b33; font-style: italic; }
+.diagnostics { font-size: 0.85rem; color: var(--muted-color); }
 
-/* Small-screen responsive tweaks */
-@media screen and (max-width: 768px) {
-    .nav-links { display: none; }
-    .nav-toggle { display: inline-block; }
-    .nav-links.open { display: flex; flex-direction: column; gap: 0.5rem; background: #fff; padding: 10px; position: absolute; right: 10px; top: 60px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 6px; }
-}
-
-/* Warning message for publication loading errors */
-.warning {
-    color: #b33;
-    font-style: italic;
-    margin-top: 1rem;
-}
-
-/* Footer */
+/* ---------- Footer ---------- */
 footer {
     background: var(--primary-color);
     color: var(--light-text);
@@ -354,18 +311,76 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsive behaviour */
+/* ---------- Responsive ---------- */
+/* ---------- Tablet & phone ---------- */
 @media screen and (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2rem;
+    .hero-content h1 { font-size: 1.7rem; }
+    .tagline { font-size: 1rem; }
+    #typed-text { min-width: 140px; }
+    section { padding: 36px 0; }
+    section h2 { font-size: 1.45rem; }
+
+    .hero-top { gap: 1rem; }
+    .profile-pic-wrap { width: 120px; height: 160px; flex: 0 0 120px; }
+
+    .nav-toggle { display: inline-block; }
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        background: #fff;
+        padding: 8px 0;
+        position: absolute;
+        right: 10px;
+        top: 56px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border-radius: 6px;
+        min-width: 220px;
     }
-    .tagline {
+    .nav-links.open { display: flex; }
+    /* bigger tap targets for nav links inside the dropdown */
+    .nav-links li { width: 100%; }
+    .nav-links a {
+        display: block;
+        padding: 12px 18px;
         font-size: 1rem;
     }
-    .project {
-        padding: 0.8rem 1rem;
+
+    /* bigger tap targets for social icons */
+    .social-icons { gap: 0.4rem; }
+    .social-icons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
     }
-.nav-links { display: none; }
-.nav-toggle { display: inline-block; }
-.nav-links.open { display: flex; flex-direction: column; gap: 0.5rem; background: #fff; padding: 10px; position: absolute; right: 10px; top: 64px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 6px; }
+
+    .timeline li { flex-direction: column; gap: 0.1rem; padding: 0.6rem 0; }
+    .timeline .date { flex: none; }
+
+    /* prevent long titles / urls from overflowing */
+    .publication-item,
+    .selected-item h3 {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    /* publication list a touch less indented on mobile */
+    .publication-list {
+        margin: 0 0 1rem 0;
+        padding-left: 1.2rem;
+    }
+}
+
+/* ---------- Very small phones ---------- */
+@media screen and (max-width: 480px) {
+    body { padding-top: 52px; }
+    .container { width: 92%; }
+    .hero-content h1 { font-size: 1.45rem; }
+    .tagline { font-size: 0.95rem; }
+    #typed-text { min-width: 110px; }
+    .profile-pic-wrap { width: 96px; height: 128px; flex: 0 0 96px; }
+    section h2 { font-size: 1.3rem; }
+    .selected-item h3, .research-section .topic h3 { font-size: 1rem; }
+    .nav-links { top: 52px; }
 }

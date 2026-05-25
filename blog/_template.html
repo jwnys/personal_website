@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+  Distill-style blog post template.
+
+  HOW TO USE
+  1. Copy this file to `posts/YYYY-MM-DD-slug.html` (e.g. `posts/2026-05-25-hello-world.html`).
+  2. Edit the <d-title>, <d-byline>, the abstract, and the <d-article> body.
+  3. Write the body as normal HTML — paragraphs (<p>), headings (<h2>/<h3>),
+     code (<d-code> or <pre><code>), math (<d-math>), figures (<figure>), etc.
+     See the Distill template docs: https://github.com/distillpub/template
+  4. Add an entry in blog/index.html linking to the new file.
+
+  TIP — math: inline math goes in <d-math>x = y^2</d-math>, block math in
+  <d-math block>...</d-math>. Reference papers with <d-cite key="..."></d-cite>
+  and define them in <d-bibliography>.
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Post title — Jannes Nys</title>
+    <!-- Distill template (gives you <d-article>, <d-math>, <d-cite>, etc.) -->
+    <script src="https://distill.pub/template.v2.js"></script>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <style>
+        /* a little spacing so the post sits below the fixed navbar */
+        d-front-matter, d-title, d-byline, d-article { display: block; }
+        d-article { padding-top: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <a href="../../index.html" class="logo">Jannes Nys</a>
+                <ul class="nav-links">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../index.html">Blog</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <d-front-matter>
+        <script type="text/json">{
+            "title": "Post title",
+            "description": "One-sentence description.",
+            "authors": [
+                { "author": "Jannes Nys", "authorURL": "https://jannesnys.com" }
+            ],
+            "katex": { "delimiters": [ { "left": "$", "right": "$", "display": false } ] }
+        }</script>
+    </d-front-matter>
+
+    <d-title>
+        <h1>Post title</h1>
+        <p>One- or two-sentence hook for the post.</p>
+    </d-title>
+
+    <d-byline></d-byline>
+
+    <d-article>
+        <p>
+            Open with the question or claim. Distill-style posts usually start
+            by stating what is at stake, then walk the reader through the
+            argument with figures and short code samples.
+        </p>
+
+        <h2>A section</h2>
+        <p>
+            Body text. Inline math like <d-math>e = mc^2</d-math> works out of
+            the box. Block math:
+        </p>
+        <d-math block>
+            \mathcal{L}(\theta) = \mathbb{E}_{x \sim p_\text{data}}\bigl[\log p_\theta(x)\bigr]
+        </d-math>
+
+        <h2>Citing things</h2>
+        <p>
+            Cite a paper inline with <d-cite key="example2025"></d-cite> and
+            define it in the bibliography below.
+        </p>
+    </d-article>
+
+    <d-appendix>
+        <h3>Acknowledgements</h3>
+        <p>Optional thanks.</p>
+    </d-appendix>
+
+    <d-bibliography>
+        <script type="text/bibtex">
+            @article{example2025,
+                title={Example paper},
+                author={Doe, Jane},
+                journal={Journal of Examples},
+                year={2025}
+            }
+        </script>
+    </d-bibliography>
+</body>
+</html>
