@@ -15,15 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typedTextElement) {
     const typedPhrases = [
       'artificial intelligence',
+      'quantum computing',
       'AI for science',
-      'scientific ML',
-      'quantum computing'
+      'scientific ML'
     ];
     let currentPhraseIndex = 0;
     let charIndex = 0;
-    const typingDelay = 90;
-    const erasingDelay = 50;
-    const newPhraseDelay = 1800;
+    const typingDelay = 45;
+    const erasingDelay = 25;
+    const newPhraseDelay = 900;
 
     function type() {
       const phrase = typedPhrases[currentPhraseIndex];
