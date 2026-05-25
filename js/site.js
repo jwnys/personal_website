@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const typedPhrases = [
       'artificial intelligence',
       'quantum computing',
-      'AI for science',
-      'scientific ML'
+      'AI for science'
     ];
     let currentPhraseIndex = 0;
     let charIndex = 0;
